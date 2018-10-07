@@ -1,0 +1,2 @@
+teamcity-agent teamcty-ub-agent = (root) NOPASSWD: /sbin/shutdown
+teamcity-agent teamcty-ub-agent = (root) NOPASSWD: /sbin/reboot

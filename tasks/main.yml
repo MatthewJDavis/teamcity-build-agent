@@ -1,0 +1,41 @@
+---
+- name: install unzip package
+  apt:
+    name: unzip
+    state: present
+    update_cache: yes
+- name: create teamcity agent system user
+  user:
+    name: teamcity-agent
+    system: yes
+    state: present
+- name: create directory for build agent 
+  file:
+      path: /teamcity-agent
+      state: directory
+      owner: teamcity-agent
+      group: teamcity-agent
+- name: Download and unarchive teamcity agent
+  unarchive:
+    src: http://teamcity.matthewdavis111.com:8111/update/buildAgent.zip
+    dest: /teamcity-agent/
+    remote_src: yes
+    owner: teamcity-agent
+    group: teamcity-agent
+    creates: /teamcity-agent
+- name: copy systemd file
+  copy:
+    src: Files/tc-agent.service
+    dest: /etc/systemd/system
+- name: reload systemd
+  systemd:
+    daemon_reload: yes
+- name: enable teamcity systemd service
+  systemd:
+    name: tc-agent.service
+    state: started
+    enabled: yes
+- name: copy shutdown file to allow teamcity user to shutdown the agent
+  copy:
+    src: Files/shutdown
+    dest: /etc/sudoers.d/

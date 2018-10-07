@@ -1,0 +1,12 @@
+[Unit]
+Description=jetbrains teamcity buildagent service
+After=network.target
+
+[Service]
+Type=forking
+User=teamcity-agent
+ExecStart=/teamcity-agent/bin/agent.sh start
+ExecStop=/teamcity-agent/bin/agent.sh stop
+
+[Install]
+WantedBy=default.target
